@@ -23,23 +23,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+var usingDefaultCorsOrigins = allowedOrigins.Length == 0;
+var frontendCorsOrigins = usingDefaultCorsOrigins
+    ? new[] { "http://localhost:5173" }
+    : allowedOrigins;
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(frontendCorsPolicy, policy =>
     {
-        if (allowedOrigins.Length == 0)
-        {
-            policy.AllowAnyOrigin()
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        }
-        else
-        {
-            policy.WithOrigins(allowedOrigins)
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        }
+        policy.WithOrigins(frontendCorsOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -70,7 +66,7 @@ var app = builder.Build();
 if (usingDefaultCorsOrigins)
 {
     app.Logger.LogWarning(
-        "No frontend origins configured under 'Frontend:Cors:AllowedOrigins'. Using default: {Origins}",
+        "No frontend origins configured under 'Cors:AllowedOrigins'. Using default: {Origins}",
         string.Join(", ", frontendCorsOrigins));
 }
 
