@@ -55,6 +55,5 @@ dotnet restore
 dotnet run
 ```
 
-Cuando la API esté en ejecución, la interfaz de Swagger UI estará disponible automáticamente en `http://localhost:5180/swagger` (o el puerto mostrado en consola). La ruta raíz de la aplicación redirige a esta página para facilitar el descubrimiento de endpoints.
-
+Cuando la API esté en ejecución, la interfaz de Swagger UI estará disponible en `https://localhost:7180/swagger` (o el puerto mostrado en consola), permitiendo explorar y probar los endpoints disponibles.
 Coloca tus scripts de base de datos en la carpeta `scripts`.
