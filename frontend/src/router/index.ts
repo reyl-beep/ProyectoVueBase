@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
 import LoginView from '../views/LoginView.vue';
 import RegisterView from '../views/RegisterView.vue';
 import DashboardView from '../views/DashboardView.vue';
@@ -10,10 +11,9 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: () => {
-        const { isAuthenticated } = useAuth();
-        return isAuthenticated.value ? '/dashboard' : '/login';
-      },
+      name: 'home',
+      component: HomeView,
+      meta: { requiresGuest: true },
     },
     {
       path: '/login',

@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using System.Text;
 using BackendApi.Configuration;
 using BackendApi.Endpoints;
@@ -7,7 +5,6 @@ using BackendApi.Models;
 using BackendApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,31 +22,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
 builder.Services.AddSingleton<ISqlProcedureExecutor, SqlProcedureExecutor>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-
-var configuredFrontendOrigins = builder.Configuration
-    .GetSection("Frontend:Cors:AllowedOrigins")
-    .Get<string[]>()
-    ?.Where(origin => !string.IsNullOrWhiteSpace(origin))
-    .Select(origin => origin.Trim())
-    .Distinct(StringComparer.OrdinalIgnoreCase)
-    .ToArray() ?? Array.Empty<string>();
-
-var frontendCorsOrigins = configuredFrontendOrigins.Length > 0
-    ? configuredFrontendOrigins
-    : new[] { "http://localhost:5173" };
-
-var usingDefaultCorsOrigins = configuredFrontendOrigins.Length == 0;
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("FrontendPolicy", policy =>
-    {
-        policy.WithOrigins(frontendCorsOrigins)
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -84,7 +56,6 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend API v1");
 });
 
-app.UseCors("FrontendPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
