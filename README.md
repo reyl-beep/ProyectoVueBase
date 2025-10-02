@@ -3,7 +3,6 @@
 Este repositorio contiene una base inicial para un proyecto compuesto por:
 
 - **frontend**: aplicación Vue 3 configurada con TypeScript, Vite y Tailwind CSS.
-
 - **backend**: proyecto de ASP.NET Core 8 con una Minimal API lista para usarse desde Visual Studio 2022.
 - **scripts**: carpeta para almacenar scripts de base de datos de Microsoft SQL Server.
 

@@ -5,20 +5,14 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend API v1");
+});
 
-// app.UseHttpsRedirection();
-
-app.MapGet("/", () => Results.Json(new
-    {
-        Message = "Bienvenido a la Minimal API en ASP.NET Core",
-        Timestamp = DateTimeOffset.UtcNow
-    }))
-    .WithName("GetWelcome")
+app.MapGet("/", () => Results.Redirect("/swagger"))
+    .WithName("RedirectToSwagger")
     .WithTags("General");
 
 app.MapGet("/health", () => Results.Ok(new { Status = "Healthy" }))
