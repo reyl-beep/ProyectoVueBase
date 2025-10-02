@@ -1,0 +1,13 @@
+# Node
+node_modules/
+*.log
+
+# Vite build output
+frontend/dist/
+
+# VS/ .NET
+bin/
+obj/
+
+# Environment
+.env
