@@ -23,6 +23,20 @@ builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
 builder.Services.AddSingleton<ISqlProcedureExecutor, SqlProcedureExecutor>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
+var configuredFrontendOrigins = builder.Configuration
+    .GetSection("Frontend:Cors:AllowedOrigins")
+    .Get<string[]>()
+    ?.Where(origin => !string.IsNullOrWhiteSpace(origin))
+    .Select(origin => origin.Trim())
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToArray() ?? Array.Empty<string>();
+
+var frontendCorsOrigins = configuredFrontendOrigins.Length > 0
+    ? configuredFrontendOrigins
+    : new[] { "http://localhost:5173" };
+
+var usingDefaultCorsOrigins = configuredFrontendOrigins.Length == 0;
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
