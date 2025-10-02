@@ -1,6 +1,6 @@
 import type { DashboardGlobal, DashboardUsuario, LoginRequest, RegisterRequest, Resultado, TokenResponse } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5180';
 
 let authToken: string | null = null;
 
