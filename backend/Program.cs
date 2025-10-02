@@ -43,6 +43,13 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+if (usingDefaultCorsOrigins)
+{
+    app.Logger.LogWarning(
+        "No frontend origins configured under 'Frontend:Cors:AllowedOrigins'. Using default: {Origins}",
+        string.Join(", ", frontendCorsOrigins));
+}
+
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
